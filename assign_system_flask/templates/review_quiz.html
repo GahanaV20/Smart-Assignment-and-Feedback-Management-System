@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Review Quiz{% endblock %}
+
+{% block content %}
+<h3>Quiz Answers - {{ submission.student_name }}</h3>
+<p><b>Assignment:</b> {{ submission.title }}</p>
+<hr>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Question</th>
+            <th>Student Answer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in answers %}
+        <tr>
+            <td>{{ a.question_text }}</td>
+            <td>{{ a.answer_text }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('teacher_dashboard') }}" class="btn btn-secondary">Back</a>
+{% endblock %}

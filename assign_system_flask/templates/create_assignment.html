@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Create Assignment{% endblock %}
+
+{% block content %}
+
+<style>
+/* Soft Blue Professional Theme */
+body{
+    background:#e9f3ff;             /* very light blue page background */
+}
+
+/* Center Card */
+.assignment-box{
+    width:650px;
+    background:white;
+    border-radius:12px;
+    padding:32px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.08);
+    border:1px solid #d7e8ff;
+}
+
+/* Headings */
+h2{
+    color:#004e92;
+    font-weight:700;
+}
+
+/* Inputs */
+.form-control,.form-select,textarea{
+    background:#f7fbff;
+    border:1px solid #bcd5f6;
+    border-radius:6px;
+}
+.form-control:focus,.form-select:focus,textarea:focus{
+    border-color:#4a90e2;
+    box-shadow:none;
+}
+
+/* Main Button */
+.btn-submit{
+    background:#2575e6;
+    border:none;
+}
+.btn-submit:hover{
+    background:#145bb4;
+}
+
+/* Add Question Button */
+.add-btn{
+    border:1px solid #4a90e2;
+    color:#2d6fcc;
+}
+.add-btn:hover{
+    background:#4a90e2;
+    color:#fff;
+}
+
+/* Quiz Question Block */
+.question-card{
+    background:#f6faff;
+    border:1px solid #d8e7ff;
+    border-radius:8px;
+}
+</style>
+
+
+<!-- ================= CENTER CONTENT ================= -->
+<div class="d-flex justify-content-center align-items-start" style="min-height:90vh; padding-top:40px;">
+
+    <div class="assignment-box">
+
+        <h2 class="text-center mb-2">Create New Assignment</h2>
+        <p class="text-center text-muted mb-4">Add description, deadline, or create a quiz</p>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <label class="fw-semibold">Title *</label>
+            <input type="text" name="title" class="form-control mb-3" required>
+
+            <label class="fw-semibold">Description</label>
+            <textarea name="description" class="form-control mb-3" rows="3"></textarea>
+
+            <label class="fw-semibold">Deadline *</label>
+            <input type="datetime-local" name="deadline" class="form-control mb-3"
+                   min="{{ min_date }}" required>
+
+            <label class="fw-semibold">Assignment Type *</label>
+            <select name="assignment_type" id="typeSelect" class="form-select mb-3" required>
+                <option value="written">Written Assignment</option>
+                <option value="file">File Upload</option>
+                <option value="quiz">Quiz</option>
+            </select>
+
+
+            <!-- FILE UPLOAD SECTION -->
+            <div id="fileSection" style="display:none;">
+                <label class="fw-semibold">Upload File </label>
+                <input type="file" name="attachment" class="form-control mb-3">
+            </div>
+
+
+            <!-- QUIZ BUILDER -->
+            <div id="quizSection" style="display:none;">
+                <h5 class="fw-bold mt-3 mb-2">Quiz Questions</h5>
+                <div id="quizContainer"></div>
+
+                <button type="button" onclick="addQuestion()" class="add-btn btn w-100 mt-2">
+                    + Add Question
+                </button>
+            </div>
+
+
+            <button class="btn btn-submit text-white w-100 mt-4">Create Assignment</button>
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+const select=document.getElementById("typeSelect");
+select.onchange=()=>{
+    fileSection.style.display = (select.value=="file") ? "block":"none";
+    quizSection.style.display = (select.value=="quiz") ? "block":"none";
+}
+
+/* Add quiz question dynamically */
+let q=0;
+function addQuestion(){
+    q++;
+    quizContainer.insertAdjacentHTML("beforeend",`
+    <div class="question-card p-3 mb-3">
+        <b>Question ${q}</b>
+        <input name="question[]" class="form-control mt-2 mb-2" placeholder="Question text">
+
+        <div class="row">
+            <div class="col-md-6"><input name="option_a[]" class="form-control mb-2" placeholder="Option A"></div>
+            <div class="col-md-6"><input name="option_b[]" class="form-control mb-2" placeholder="Option B"></div>
+            <div class="col-md-6"><input name="option_c[]" class="form-control mb-2" placeholder="Option C"></div>
+            <div class="col-md-6"><input name="option_d[]" class="form-control mb-2" placeholder="Option D"></div>
+        </div>
+
+        <select name="correct_option[]" class="form-select" required>
+            <option value="">Correct Answer</option>
+            <option>A</option><option>B</option><option>C</option><option>D</option>
+        </select>
+    </div>`);
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Review Quiz Submission{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h3 class="mb-3 text-primary">Quiz Evaluation Panel</h3>
+
+    <form method="POST">
+
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Question</th>
+                    <th>Correct Answer</th>
+                    <th>Student Answer</th>
+                    <th>Marks</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for q in answers %}
+                <tr>
+                    <td>{{ q.question_text }}</td>
+                    <td><span class="text-success fw-bold">{{ q.correct_answer }}</span></td>
+                    <td>{{ q.answer_text }}</td>
+
+                    <!-- Marks entry -->
+                    <td style="width:120px;">
+                        <input type="number" name="mark_{{ q.question_id }}" 
+                               class="form-control" min="0" max="10"
+                               placeholder="0-10" required>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Feedback Box -->
+        <label class="fw-bold mt-3">Teacher Feedback:</label>
+        <textarea name="feedback" class="form-control" rows="3"
+                  placeholder="Write feedback for student..."></textarea>
+
+        <button class="btn btn-success mt-4 w-100 fw-bold">Save Marks & Feedback</button>
+    </form>
+
+</div>
+{% endblock %}

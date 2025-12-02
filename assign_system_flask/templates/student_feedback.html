@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}My Feedback{% endblock %}
+
+{% block content %}
+
+<style>
+    .feedback-header{
+        font-size:26px; font-weight:700; color:#0a3d8f;
+    }
+    .table thead{
+        background:#dce9ff;
+        color:#003a8c;
+        font-weight:600;
+    }
+    .table-hover tbody tr:hover{
+        background:#eef6ff;
+        transition:0.25s;
+    }
+    .badge-status{
+        padding:5px 9px;
+        border-radius:6px;
+        font-size:12px;
+    }
+    .card-feedback{
+        background:white;
+        border-radius:14px;
+        border:1px solid #bcd2f1;
+        padding:25px;
+    }
+</style>
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="feedback-header">My Marks & Feedback</h3>
+  <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary btn-sm">← Back</a>
+</div>
+
+
+<!-- TABLE -->
+<div class="card-feedback shadow-sm mb-4">
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Assignment</th>
+          <th>Submitted</th>
+          <th>Status</th>
+          <th>Marks</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td><b>{{ r.assignment_title }}</b></td>
+          <td>{{ r.submitted_at }}</td>
+          
+          <td>
+            {% if r.status == "Reviewed" %}
+                <span class="badge bg-success text-light">Reviewed</span>
+            {% else %}
+                <span class="badge bg-warning text-dark">{{ r.status }}</span>
+            {% endif %}
+          </td>
+
+          <td><b>{{ r.final_marks if r.final_marks else "Pending" }}</b></td>
+          <td>{{ r.feedback if r.feedback else "-" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- PERFORMANCE GRAPH -->
+<div class="card-feedback shadow-sm mt-3">
+    <h5 class="fw-bold">Performance Progress</h5>
+    <p class="text-muted">Track your score growth over assignments</p>
+
+    <canvas id="performanceChart" height="130"></canvas>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var labels = {{ labels | tojson }};
+var marks = {{ marks | tojson }};
+
+var ctx = document.getElementById('performanceChart').getContext('2d');
+var gradient = ctx.createLinearGradient(0,0,0,300);
+gradient.addColorStop(0,"rgba(0, 120, 255, 0.9)");
+gradient.addColorStop(1,"rgba(0, 120, 255, 0.15)");
+
+new Chart(ctx,{
+    type:"bar",
+    data:{
+        labels:labels,
+        datasets:[
+        {
+            label:"Marks",
+            data:marks,
+            backgroundColor:gradient,
+            borderRadius:10
+        },
+        {
+            label:"Trend Line",
+            data:marks,
+            type:"line",
+            borderColor:"#007BFF",
+            borderWidth:3,
+            tension:0.35,
+            pointRadius:6,
+            pointBackgroundColor:"#007BFF"
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{ legend:{position:"top"} },
+        scales:{ y:{beginAtZero:true} }
+    }
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Submissions{% endblock %}
+
+{% block content %}
+
+<!-- ====== PAGE THEME ====== -->
+<style>
+.page-heading{
+    font-size:24px; font-weight:700; color:#0a3d8f;
+}
+.sub-note{ font-size:13px; color:#6c7a8b; }
+
+.table thead{
+    background:#dce9ff;
+    color:#003a8c;
+    font-weight:600;
+}
+.table-hover tbody tr:hover{
+    background:#eef6ff;
+    transition:0.25s;
+}
+
+.badge-status{
+    font-size:12px; 
+    padding:6px 10px;
+    border-radius:6px;
+    font-weight:600;
+}
+
+.btn-view{
+    background:#0a65c2;
+    color:#fff;
+    border-radius:6px;
+}
+.btn-view:hover{ background:#094e94; }
+
+.btn-review{
+    background:#f8b400;
+    color:#000;
+    border-radius:6px;
+}
+.btn-review:hover{ background:#d69a01; }
+
+.card-box{
+    border:1px solid #8db3eb;
+    border-radius:14px;
+    padding:25px;
+    background:white;
+}
+</style>
+
+<!-- ====== PAGE HEADER ====== -->
+<div class="d-flex justify-content-between mb-4 align-items-center">
+    <div>
+        <div class="page-heading"> Submissions – <span class="text-primary">{{ assignment.title }}</span> </div>
+        <div class="sub-note"> Review & evaluate student work below </div>
+    </div>
+
+    <a href="{{ url_for('teacher_dashboard') }}" class="btn btn-secondary px-3" style="border-radius:6px;">
+        ← Back to Dashboard
+    </a>
+</div>
+
+<!-- ====== MAIN TABLE CARD ====== -->
+<div class="card-box shadow-sm">
+
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+
+<thead>
+<tr>
+    <th>Student</th>
+    <th>Submitted</th>
+    <th>Status</th>
+    <th>Submission Type</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for s in submissions %}
+<tr>
+    <td><b>{{ s.student_name }}</b></td>
+
+    <td>{{ s.submitted_at }}</td>
+
+    <!-- STATUS -->
+    <td>
+        {% if s.status == "Reviewed" %}
+            <span class="badge-status bg-success text-light">Reviewed</span>
+        {% elif s.status == "Submitted" %}
+            <span class="badge-status bg-primary text-light">Submitted</span>
+        {% else %}
+            <span class="badge-status bg-secondary text-light">{{ s.status }}</span>
+        {% endif %}
+    </td>
+
+    <!-- TYPE -->
+    <td>
+        {% if assignment.assignment_type == "quiz" %}
+            <span class="badge-status bg-warning text-dark">Quiz</span>
+        {% else %}
+            <a href="{{ url_for('static', filename=s.file_url) }}" target="_blank" class="btn btn-view btn-sm">
+    View File
+</a>
+        {% endif %}
+    </td>
+
+    <!-- ACTION -->
+    <td>
+        {% if assignment.assignment_type == "quiz" %}
+            <a href="{{ url_for('review_quiz_submission', submission_id=s.submission_id) }}"
+               class="btn btn-review btn-sm">
+               Review Quiz 📝
+            </a>
+        {% else %}
+            <a href="{{ url_for('review_submission', submission_id=s.submission_id) }}"
+               class="btn btn-primary btn-sm">
+               Review File
+            </a>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+{% endblock %}

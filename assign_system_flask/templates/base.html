@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}AssignFlow{% endblock %}</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --primary:#1e67e6;
+        --light:#eef6ff;
+        --soft:#fafcff;
+        --text-muted:#616a75;
+    }
+
+    /* ==================== BODY ==================== */
+    body{
+        background: linear-gradient(180deg,#fafcff,#eef5ff);
+        font-family: "Segoe UI", sans-serif;
+        font-size: 15px; /* ⬆ Increased overall font size */
+        min-height:100vh;
+    }
+
+    /* ==================== HEADER ==================== */
+    .app-header{
+        background:white;
+        padding:14px 0;
+        border-bottom:1px solid rgba(0,0,0,0.06);
+        box-shadow:0 2px 8px rgba(0,0,0,0.04);
+        position:sticky;top:0;z-index:50;
+    }
+    .logo-img{
+        width:60px;height:60px;
+        border-radius:50%;
+        object-fit:cover;
+    }
+    .brand-title{
+        font-size:25px; /* Bigger title */
+        font-weight:700;
+        margin-left:10px;
+        color:var(--primary);
+    }
+
+    /* ==================== MAIN CONTENT ==================== */
+    main{
+        padding:32px; /* Slightly increased spacing */
+        animation:fadeIn .55s ease;
+        font-size: 16px; /* Page text bigger & readable */
+    }
+    
+    h1,h2,h3,h4,h5{
+        font-weight:600;
+        letter-spacing:0.2px;
+    }
+    h3{ font-size:26px; }
+    h4{ font-size:22px; }
+    h5{ font-size:19px; }
+
+    .btn{
+        font-size:15px;
+        padding:8px 14px;
+    }
+    .logo-border{
+    border: 1px solid #689df8; /* Blue border */
+    padding:4px;               /* Space between logo & border */
+    border-radius:50%;         /* Still round */
+}
+
+    table{
+        font-size:15px; /* Table text improved */
+    }
+
+    @keyframes fadeIn{
+        from{opacity:0; transform:translateY(10px);}
+        to{opacity:1; transform:translateY(0);}
+    }
+</style>
+
+{% block head %}{% endblock %}
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="container d-flex justify-content-between align-items-center">
+
+        <div class="d-flex align-items-center">
+            <img src="{{ url_for('static', filename='images/image.png') }}" class="logo-img logo-border">
+            <span class="brand-title">AssignFlow</span>
+        </div>
+
+        <div>
+            {% if session.user %}
+              <span class="me-3 text-muted" style="font-size:16px;">Hi, <b>{{ session.user.name }}</b></span>
+              <a href="{{ url_for('logout') }}" class="btn btn-outline-primary btn-sm px-3">Logout</a>
+            {% else %}
+              <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm px-3">Login</a>
+            {% endif %}
+        </div>
+
+    </div>
+</header>
+
+<div class="container mt-3">
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for m in messages %}
+      <div class="alert alert-info">{{ m }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+</div>
+
+<!-- CONTENT -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<style>
+html, body{
+    margin:0;
+    padding:0;
+    overflow-x:hidden;
+}
+
+.register_container{
+    height:100vh;
+    width:100vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#dbeafe;          /* Light blue background */
+}
+
+.register_box{
+    width:450px;
+    background:white;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0px 4px 18px rgba(0,0,0,0.08);
+}
+</style>
+
+
+<div class="register_container">
+  <div class="register_box">
+
+      <h3 class="text-center mb-2">Create an Account</h3>
+      <p class="text-center text-muted mb-4">Start using AssignFlow — Smart Assignment Portal</p>
+
+      <form method="POST">
+
+          <div class="mb-3">
+              <label>Full Name</label>
+              <input type="text" name="name" class="form-control" placeholder="Name" required>
+          </div>
+
+          <div class="mb-3">
+              <label>Email</label>
+              <input type="email" name="email" class="form-control" placeholder="example@gmail.com" required>
+          </div>
+
+          <div class="mb-3">
+              <label>Password</label>
+              <input type="password" name="password" class="form-control" placeholder="Choose a password" required>
+          </div>
+
+          <div class="mb-3">
+              <label>Select Role</label>
+              <select name="role" class="form-select" required>
+                  <option value="">Choose One</option>
+                  <option value="Teacher">Teacher</option>
+                  <option value="Student">Student</option>
+              </select>
+          </div>
+
+          <button class="btn btn-success w-100 mt-2">Register</button>
+
+      </form>
+
+      <div class="text-center mt-3">
+          <small class="text-muted">
+              Already have an account?
+              <a href="{{ url_for('login') }}" style="font-weight:600;">Login</a>
+          </small>
+      </div>
+
+  </div>
+</div>
+
+{% endblock %}

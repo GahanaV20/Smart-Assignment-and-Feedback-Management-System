@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Review Submission{% endblock %}
+
+{% block content %}
+
+<style>
+.review-card{
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    border-left:6px solid #2e89ff;
+    box-shadow:0 6px 14px rgba(0,0,0,0.08);
+    width:480px;
+    margin:auto;
+    transition:0.25s;
+}
+.review-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+label{ font-weight:600; margin-top:10px; }
+input, textarea{
+    width:100%;
+    border:1px solid #c8d9ff;
+    padding:10px;
+    border-radius:8px;
+    margin-top:5px;
+}
+input:focus, textarea:focus{
+    border-color:#2e89ff;
+    outline:none;
+    box-shadow:0 0 6px rgba(46,137,255,0.35);
+}
+
+/* Buttons */
+button{
+    background:#2e89ff;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    margin-top:15px;
+    width:100%;
+    font-weight:600;
+    transition:.25s;
+}
+button:hover{
+    background:#1d6dd8;
+    transform:scale(1.03);
+}
+
+/* Back link */
+.back-btn{
+    display:inline-block;
+    margin-top:15px;
+    text-decoration:none;
+    font-weight:600;
+    color:#2e89ff;
+}
+.back-btn:hover{ text-decoration:underline; }
+</style>
+
+<h2 class="fw-bold text-center mb-4">Review Submission</h2>
+
+<div class="review-card">
+
+    <p><b>Assignment:</b> {{ submission.assignment_title }}</p>
+    <p><b>Student:</b> {{ submission.student_name }}</p>
+    <p><b>Submitted On:</b> {{ submission.submitted_at }}</p>
+
+    <p>
+        <b>View File:</b>
+        <a href="{{ url_for('static', filename='uploads/' + submission.file_url) }}" 
+           target="_blank" style="color:#1d6dd8; font-weight:600;">
+           Open Submitted File 📄
+        </a>
+    </p>
+
+    <form method="POST">
+        <label>Marks</label>
+        <input type="number" name="marks" min="0" placeholder="Enter marks" required>
+
+        <label>Comments / Feedback</label>
+        <textarea name="comments" rows="4" placeholder="Write feedback for student..."></textarea>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+
+    <a href="{{ url_for('view_submissions', assignment_id=submission.assignment_id) }}" class="back-btn">
+        ← Back to Submissions
+    </a>
+</div>
+
+{% endblock %}
